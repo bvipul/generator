@@ -24,4 +24,4 @@ Route::group(['namespace' => 'route_namespace', 'prefix' => 'admin', 'as' => 'ad
 	//For Datatable
 	Route::post('dummy_name/get', 'DummyTableController')->name('dummy_name.get');
 @endWithoutNamespace
-}
+});
