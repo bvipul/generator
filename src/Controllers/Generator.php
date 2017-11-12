@@ -629,6 +629,7 @@ class Generator
         }
         //Generate the Route file
         $this->generateFile(false, [
+            'route_namespace'      => config('generator.controller_namespace'),
             'DummyModuleName'      => $this->module,
             'DummyModel'           => $this->directory,
             'dummy_name'           => strtolower(str_plural($this->model)),
