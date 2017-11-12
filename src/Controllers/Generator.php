@@ -57,8 +57,8 @@ class Generator
      */
     protected $controller;
     protected $table_controller;
-    protected $controller_namespace = 'App\\Http\\Controllers\\Backend\\';
-    protected $table_controller_namespace = 'App\\Http\\Controllers\\Backend\\';
+    protected $controller_namespace = 'App\\Http\\Controllers\\';
+    protected $table_controller_namespace = 'App\\Http\\Controllers\\';
 
     /**
      * Requests
@@ -88,7 +88,7 @@ class Generator
     protected $create_request_namespace;
     protected $update_request_namespace;
     protected $delete_request_namespace;
-    protected $request_namespace = 'App\\Http\\Requests\\Backend\\';
+    protected $request_namespace = 'App\\Http\\Requests\\';
 
     /**
      * Permissions
@@ -128,7 +128,7 @@ class Generator
      * 2. Repository Namespace.
      */
     protected $repository;
-    protected $repo_namespace = 'App\\Repositories\\Backend\\';
+    protected $repo_namespace = 'App\\Repositories\\';
 
     /**
      * Table Name.
@@ -145,12 +145,12 @@ class Generator
     /**
      * Route Path.
      */
-    protected $route_path = 'routes\\Backend\\';
+    protected $route_path = 'routes\\Generator\\';
 
     /**
      * View Path.
      */
-    protected $view_path = 'resources\\views\\backend\\';
+    protected $view_path = 'resources\\views\\';
 
     /**
      * Event Namespace.
@@ -246,10 +246,10 @@ class Generator
         $this->model_namespace .= $this->getFullNamespace($this->model);
 
         //Controller Namespace
-        $this->controller_namespace .= $this->getFullNamespace($this->controller);
+        $this->controller_namespace .= config('generator.controller_namespace').'\\'.$this->getFullNamespace($this->controller);
 
         //Table Controller Namespace
-        $this->table_controller_namespace .= $this->getFullNamespace($this->table_controller);
+        $this->table_controller_namespace .= config('generator.controller_namespace').'\\'.$this->getFullNamespace($this->table_controller);
 
         //Attribute Namespace
         $this->attribute_namespace .= $this->getFullNamespace($this->attribute, $this->trait_directory);
@@ -258,9 +258,10 @@ class Generator
         $this->relationship_namespace .= $this->getFullNamespace($this->relationship, $this->trait_directory);
 
         //View Path
-        $this->view_path .= $this->getFullNamespace('');
+        $this->view_path .= config('generator.views_folder').'\\'.$this->getFullNamespace('');
 
         //Requests
+        $this->request_namespace .= config('generator.request_namespace'). '\\';
         $this->edit_request_namespace = $this->request_namespace.$this->getFullNamespace($this->edit_request);
         $this->store_request_namespace = $this->request_namespace.$this->getFullNamespace($this->store_request);
         $this->manage_request_namespace = $this->request_namespace.$this->getFullNamespace($this->manage_request);
@@ -269,7 +270,7 @@ class Generator
         $this->delete_request_namespace = $this->request_namespace.$this->getFullNamespace($this->delete_request);
 
         //Repository Namespace
-        $this->repo_namespace .= $this->getFullNamespace($this->repository);
+        $this->repo_namespace .= config('generator.request_namespace'). '\\' .$this->getFullNamespace($this->repository);
 
         //Events Namespace
         $this->event_namespace .= $this->getFullNamespace('');
@@ -533,7 +534,7 @@ class Generator
 
             //replacements
             $namespaces .= 'use '.$this->create_request_namespace.";\n";
-            $namespaces .= 'use  '.$this->store_request_namespace.";\n";
+            $namespaces .= 'use '.$this->store_request_namespace.";\n";
             $replacements['DummyCreateRequest'] = $this->create_request;
             $replacements['DummyStoreRequest'] = $this->store_request;
         }
@@ -545,7 +546,7 @@ class Generator
             $file_contents = $this->delete_all_between('@endEdit', '@endEdit', $file_contents);
             //replacements
             $namespaces .= 'use '.$this->edit_request_namespace.";\n";
-            $namespaces .= 'use  '.$this->update_request_namespace.";\n";
+            $namespaces .= 'use '.$this->update_request_namespace.";\n";
             $replacements['DummyEditRequest'] = $this->edit_request;
             $replacements['DummyUpdateRequest'] = $this->update_request;
         }
@@ -635,6 +636,21 @@ class Generator
             'DummyTableController' => $this->table_controller,
             'dummy_argument_name'  => strtolower($this->model),
         ], $this->route_path.$this->model, $file_contents);
+
+        //Routes web.php file
+        $web_file = base_path('routes/web.php');
+        //file_contents of Backend.php
+        $file_contents = file_get_contents($web_file);
+        //If this is already not there, then only append
+        if (!strpos($file_contents, "includeRouteFiles(__DIR__.'/Generator/');")) {
+            $content = "\n
+            /*\n
+            * Routes From Module Generator\n
+            */\n
+            includeRouteFiles(__DIR__.'/Generator/');";
+            //Appending into web.php file
+            file_put_contents($web_file, $content, FILE_APPEND);
+        }
     }
 
     /**

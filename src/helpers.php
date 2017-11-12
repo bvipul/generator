@@ -22,7 +22,7 @@ if (!function_exists('insert_into_array')) {
 if (!function_exists('add_key_value_in_file')) {
     function add_key_value_in_file($file_name, $new_key_value, $parent_keys = null)
     {
-        $file_array = eval(str_replace('<?php', '', str_replace('?>', '', file_get_contents($file_name))));
+        $file_array = eval(str_replace('<?php', '', str_replace('?>', '', @file_get_contents($file_name))));
         if (!empty($parent_keys)) {
             $parents = explode('.', $parent_keys);
             insert_into_array($file_array, $parents, $new_key_value);

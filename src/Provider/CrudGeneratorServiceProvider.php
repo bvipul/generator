@@ -16,6 +16,11 @@ class CrudGeneratorServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../views', 'generator');
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'generator');
+        $this->mergeConfigFrom(__DIR__ . '/../config/generator.php', 'generator');
+
+        $this->publishes([
+            __DIR__ . '/../config/generator.php' => config_path('generator.php'),
+        ], 'generator');
         $this->publishes([
             __DIR__.'/../views' => base_path('resources/views/vendor/generator'),
         ]);
