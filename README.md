@@ -23,6 +23,18 @@ After installing the Generator, register the `Bvipul\Generator\Provider\CrudGene
 ],
 ```
 
+After adding the provider, you can add the route of this module generator in sidebar file.
+```
+'admin.modules.index'
+```
+
+and you can get the title "Module Management" from package's translation file by using:
+
+```
+{{ trans('generator::menus.modules.management') }}
+```
+
+
 # Contribute
 You can contribute to this project, by just taking fork of it. We are open for suggestion and PRs. If you have any new suggestions or anything for that matter, contact me at basapativipulkumar@gmail.com
 
