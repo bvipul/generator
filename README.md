@@ -7,7 +7,7 @@ This CRUD Generator is open-sourced software licensed under the MIT license
 # Official Documentation
 To get started with Generator, use Composer to add the package to your project's dependencies:
 
-`composer require bvipul/generator --dev 0.8`
+`composer require bvipul/generator --dev 0.9`
 
 Since you would be having work of this generator, while creating your project, hence only require it in the dev environment.
 
