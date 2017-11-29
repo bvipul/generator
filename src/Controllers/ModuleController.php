@@ -76,6 +76,7 @@ class ModuleController extends Controller
         $this->generator->insertToLanguageFiles();
         $this->generator->createViewFiles();
         $this->generator->createEvents();
+        
         //Creating the Module
         $this->repository->create($request->all(), $this->generator->getPermissions());
 

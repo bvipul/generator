@@ -331,7 +331,9 @@ class Generator
      */
     public function getPermissions()
     {
-        $permissions = [];
+        $permissions = [
+            $this->manage_request
+        ];
 
         if ($this->create) {
             $permissions[] = $this->create_permission;
