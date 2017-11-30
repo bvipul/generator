@@ -34,7 +34,7 @@ class CrudGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         include __DIR__.'/../routes.php';
-        require __DIR__.'/../breadcrumbs.php';
+        // require __DIR__.'/../breadcrumbs.php';
         require_once(__DIR__.'/../helpers.php');
         $this->app->make('Bvipul\Generator\Module');
         $this->app->make('Bvipul\Generator\Controllers\Generator');
