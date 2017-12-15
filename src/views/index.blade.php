@@ -98,7 +98,72 @@
                 }
             });
 
-            FinBuilders.DataTableSearch.init(dataTable);
+            (function (dataTable) {
+
+                // Header All search columns
+                $("div.dataTables_filter input").unbind();
+                $("div.dataTables_filter input").keypress( function (e)
+                {
+                    if (e.keyCode == 13)
+                    {
+                        dataTable.fnFilter( this.value );
+                    }
+                });
+
+                // Individual columns search
+                $('.search-input-text').on( 'keypress', function (e) {
+                    // for text boxes
+                    if (e.keyCode == 13)
+                    {
+                        var i =$(this).attr('data-column');  // getting column index
+                        var v =$(this).val();  // getting search input value
+                        dataTable.api().columns(i).search(v).draw();
+                    }
+                });
+
+                // Individual columns search
+                $('.search-input-select').on( 'change', function (e) {
+                    // for dropdown
+                    var i =$(this).attr('data-column');  // getting column index
+                    var v =$(this).val();  // getting search input value
+                    dataTable.api().columns(i).search(v).draw();
+                });
+
+                // Individual columns reset
+                $('.reset-data').on( 'click', function (e) {
+                    var textbox = $(this).prev('input'); // Getting closest input field
+                    var i =textbox.attr('data-column');  // Getting column index
+                    $(this).prev('input').val(''); // Blank the serch value
+                    dataTable.api().columns(i).search("").draw();
+                });
+
+                //Copy button
+                $('#copyButton').click(function(){
+                    $('.copyButton').trigger('click');
+                });
+                //Download csv
+                $('#csvButton').click(function(){
+                    $('.csvButton').trigger('click');
+                });
+                //Download excelButton
+                $('#excelButton').click(function(){
+                    $('.excelButton').trigger('click');
+                });
+                //Download pdf
+                $('#pdfButton').click(function(){
+                    $('.pdfButton').trigger('click');
+                });
+                //Download printButton
+                $('#printButton').click(function(){
+                    $('.printButton').trigger('click');
+                });
+
+                var id = $('.table-responsive .dataTables_filter').attr('id');
+                $('#'+id+' label').append('<a class="reset-data" id="input-sm-reset" href="javascript:void(0)"><i class="fa fa-times"></i></a>');
+                $(document).on('click', "#"+id+" label #input-sm-reset", function(){
+                    dataTable.fnFilter('');
+                });
+            }(dataTable));
         });
     </script>
 @endsection
