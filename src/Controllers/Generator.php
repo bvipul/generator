@@ -182,7 +182,7 @@ class Generator
         $this->model = str_singular(title_case($input['model_name']));
 
         //Table
-        $this->table = str_plural(strtolower($input['table_name']));
+        $this->table = strtolower($input['table_name']);
 
         //Controller
         $this->controller = str_plural($this->model).'Controller';
@@ -214,21 +214,25 @@ class Generator
         $this->create = !empty($input['model_create']) ? true : false;
         $this->delete = !empty($input['model_delete']) ? true : false;
 
+        $model_singular = strtolower(str_singular($this->model));
+        
         //Permissions
-        $this->edit_permission = 'edit-'.strtolower(str_singular($this->model));
-        $this->store_permission = 'store-'.strtolower(str_singular($this->model));
-        $this->manage_permission = 'manage-'.strtolower(str_singular($this->model));
-        $this->create_permission = 'create-'.strtolower(str_singular($this->model));
-        $this->update_permission = 'update-'.strtolower(str_singular($this->model));
-        $this->delete_permission = 'delete-'.strtolower(str_singular($this->model));
+        $this->edit_permission = 'edit-'.$model_singular;
+        $this->store_permission = 'store-'.$model_singular;
+        $this->manage_permission = 'manage-'.$model_singular;
+        $this->create_permission = 'create-'.$model_singular;
+        $this->update_permission = 'update-'.$model_singular;
+        $this->delete_permission = 'delete-'.$model_singular;
 
+        $model_plural = strtolower(str_plural($this->model));
+        
         //Routes
-        $this->index_route = 'admin.'.strtolower(str_plural($this->model)).'.index';
-        $this->create_route = 'admin.'.strtolower(str_plural($this->model)).'.create';
-        $this->store_route = 'admin.'.strtolower(str_plural($this->model)).'.store';
-        $this->edit_route = 'admin.'.strtolower(str_plural($this->model)).'.edit';
-        $this->update_route = 'admin.'.strtolower(str_plural($this->model)).'.update';
-        $this->delete_route = 'admin.'.strtolower(str_plural($this->model)).'.destroy';
+        $this->index_route = 'admin.'.$model_plural.'.index';
+        $this->create_route = 'admin.'.$model_plural.'.create';
+        $this->store_route = 'admin.'.$model_plural.'.store';
+        $this->edit_route = 'admin.'.$model_plural.'.edit';
+        $this->update_route = 'admin.'.$model_plural.'.update';
+        $this->delete_route = 'admin.'.$model_plural.'.destroy';
 
         //Events
         $this->events = array_filter($input['event']);
@@ -646,11 +650,7 @@ class Generator
         $file_contents = file_get_contents($web_file);
         //If this is already not there, then only append
         if (!strpos($file_contents, "includeRouteFiles(__DIR__.'/Generator/');")) {
-            $content = "\n
-            /*\n
-            * Routes From Module Generator\n
-            */\n
-            includeRouteFiles(__DIR__.'/Generator/');";
+            $content = "\n/*\n* Routes From Module Generator\n*/\nincludeRouteFiles(__DIR__.'/Generator/');";
             //Appending into web.php file
             file_put_contents($web_file, $content, FILE_APPEND);
         }
@@ -837,9 +837,11 @@ class Generator
             foreach ($this->events as $event) {
                 $path = escapeSlashes($base_path.DIRECTORY_SEPARATOR.$event);
                 $model = str_replace(DIRECTORY_SEPARATOR, '\\', $path);
+                
                 Artisan::call('make:event', [
                     'name' => $model,
                 ]);
+                
                 Artisan::call('make:listener', [
                     'name'    => $model.'Listener',
                     '--event' => $model,
@@ -890,6 +892,13 @@ class Generator
             return $package_stubs_path;
     }
 
+    /**
+     * getBasePath
+     *
+     * @param string $namespace
+     * @param bool $status
+     * @return string
+     */
     public function getBasePath($namespace, $status = false)
     {
         if ($status) {
@@ -899,6 +908,12 @@ class Generator
         return base_path(lcfirst(escapeSlashes($namespace)));
     }
 
+    /**
+     * Removes the filename from the passed the namespace
+     *
+     * @param string $namespace
+     * @return string
+     */
     public function removeFileNameFromEndOfNamespace($namespace)
     {
         $namespace = explode('\\', $namespace);
@@ -906,11 +921,6 @@ class Generator
         unset($namespace[count($namespace) - 1]);
 
         return lcfirst(implode('\\', $namespace));
-    }
-
-    public function appendFileNameToEndOfNamespace($namespace, $file)
-    {
-        return escapeSlashes($namespace.DIRECTORY_SEPARATOR.$file);
     }
 
     /**
