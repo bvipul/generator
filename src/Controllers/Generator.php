@@ -176,7 +176,7 @@ class Generator
         $this->module = title_case($input['name']);
 
         //Directory
-        $this->directory = str_singular(title_case($input['directory_name']));
+        $this->directory = str_replace(' ' , '', str_singular(title_case($input['directory_name'])));
 
         //Model
         $this->model = str_singular(title_case($input['model_name']));
