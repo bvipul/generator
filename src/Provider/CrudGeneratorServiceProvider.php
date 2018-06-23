@@ -24,6 +24,11 @@ class CrudGeneratorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../views' => base_path('resources/views/vendor/generator'),
         ]);
+
+        // Load the Breadcrumbs for the package
+        if (class_exists('Breadcrumbs')) {
+            require __DIR__ . '/../breadcrumbs.php';
+        }
     }
 
     /**
@@ -34,7 +39,6 @@ class CrudGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         include __DIR__.'/../routes.php';
-        // require __DIR__.'/../breadcrumbs.php';
         require_once(__DIR__.'/../helpers.php');
         $this->app->make('Bvipul\Generator\Module');
         $this->app->make('Bvipul\Generator\Controllers\Generator');
