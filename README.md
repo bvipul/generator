@@ -1,5 +1,5 @@
 # Generator
-A Laravel 5.4 CRUD Generator Package for Laravel AdminPanel &lt; https://github.com/viralsolani/laravel-adminpanel &gt;
+A Laravel 5.6 CRUD Generator Package for Laravel AdminPanel &lt; https://github.com/viralsolani/laravel-adminpanel &gt;
 
 # License
 This CRUD Generator is open-sourced software licensed under the MIT license
@@ -7,7 +7,7 @@ This CRUD Generator is open-sourced software licensed under the MIT license
 # Official Documentation
 To get started with Generator, use Composer to add the package to your project's dependencies:
 
-`composer require bvipul/generator --dev ^0.9`
+`composer require bvipul/generator ^5.6`
 
 Since you would be having work of this generator, while creating your project, hence only require it in the dev environment.
 
@@ -23,9 +23,9 @@ After installing the Generator, register the `Bvipul\Generator\Provider\CrudGene
 ],
 ```
 
-After adding the provider, you can add the route of this module generator in sidebar file.
+If you need to change what the stubs are generating for you, you can always publish the package's views files by below command:
 ```
-'admin.modules.index'
+php artisan vendor:publish --tag=generator_views
 ```
 
 and you can get the title "Module Management" from package's translation file by using:
