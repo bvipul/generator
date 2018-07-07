@@ -10,6 +10,10 @@ return [
 // Default : Backend
 'request_namespace' => 'Backend',
 
+// After App\Htt\Responses
+// Default : Backend
+'response_namespace' => 'Backend',
+
 // After App\Repositories
 // Default : Backend
 'repository_namespace'=> 'Backend',

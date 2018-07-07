@@ -5,6 +5,10 @@ namespace DummyNamespace;
 use DummyModelNamespace;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Responses\RedirectResponse;
+use App\Http\Responses\ViewResponse;
+use DummyCreateResponseNamespace;
+use DummyEditResponseNamespace;
 use DummyRepositoryNamespace;
 use DummyManageRequestNamespace;
 @Namespaces
@@ -32,27 +36,27 @@ class DummyController extends Controller
      * Display a listing of the resource.
      *
      * @param  DummyManageRequestNamespace  $request
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Responses\ViewResponse
      */
     public function index(DummyManageRequest $request)
     {
-        return view('backend.dummy_small_plural_model.index');
+        return new ViewResponse('backend.dummy_small_plural_model.index');
     }
     @startCreate/**
      * Show the form for creating a new resource.
      *
      * @param  DummyCreateRequestNamespace  $request
-     * @return \Illuminate\Http\Response
+     * @return \DummyCreateResponseNamespace
      */
     public function create(DummyCreateRequest $request)
     {
-        return view('backend.dummy_small_plural_model.create');
+        return new CreateResponse('backend.dummy_small_plural_model.create');
     }
     /**
      * Store a newly created resource in storage.
      *
      * @param  DummyStoreRequestNamespace  $request
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Responses\RedirectResponse
      */
     public function store(DummyStoreRequest $request)
     {
@@ -61,25 +65,25 @@ class DummyController extends Controller
         //Create the model using repository create method
         $this->repository->create($input);
         //return with successfull message
-        return redirect()->route('admin.dummy_small_plural_model.index')->withFlashSuccess(trans('alerts.backend.dummy_small_plural_model.created'));
+        return new RedirectResponse(route('admin.dummy_small_plural_model.index'), ['flash_success' => trans('alerts.backend.dummy_small_plural_model.created')]);
     }
     @endCreate@startEdit/**
      * Show the form for editing the specified resource.
      *
      * @param  DummyModelNamespace  $DummyArgumentName
      * @param  DummyEditRequestNamespace  $request
-     * @return \Illuminate\Http\Response
+     * @return \DummyEditResponseNamespace
      */
     public function edit(DummyModel $DummyArgumentName, DummyEditRequest $request)
     {
-        return view('backend.dummy_small_plural_model.edit', compact('DummyArgumentName'));
+        return new EditResponse($DummyArgumentName);
     }
     /**
      * Update the specified resource in storage.
      *
      * @param  DummyUpdateRequestNamespace  $request
      * @param  DummyModelNamespace  $DummyArgumentName
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Responses\RedirectResponse
      */
     public function update(DummyUpdateRequest $request, DummyModel $DummyArgumentName)
     {
@@ -88,21 +92,21 @@ class DummyController extends Controller
         //Update the model using repository update method
         $this->repository->update( $DummyArgumentName, $input );
         //return with successfull message
-        return redirect()->route('admin.dummy_small_plural_model.index')->withFlashSuccess(trans('alerts.backend.dummy_small_plural_model.updated'));
+        return new RedirectResponse(route('admin.dummy_small_plural_model.index'), ['flash_success' => trans('alerts.backend.dummy_small_plural_model.updated')]);
     }
     @endEdit@startDelete/**
      * Remove the specified resource from storage.
      *
      * @param  DummyDeleteRequestNamespace  $request
      * @param  DummyModelNamespace  $DummyArgumentName
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Responses\RedirectResponse
      */
     public function destroy(DummyModel $DummyArgumentName, DummyDeleteRequest $request)
     {
         //Calling the delete method on repository
         $this->repository->delete($DummyArgumentName);
         //returning with successfull message
-        return redirect()->route('admin.dummy_small_plural_model.index')->withFlashSuccess(trans('alerts.backend.dummy_small_plural_model.deleted'));
+        return new RedirectResponse(route('admin.dummy_small_plural_model.index'), ['flash_success' => trans('alerts.backend.dummy_small_plural_model.deleted')]);
     }
     @endDelete
 }

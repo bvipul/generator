@@ -1,0 +1,35 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Contracts\Support\Responsable;
+
+class EditResponse implements Responsable
+{
+    /**
+     * @var DummyModelNamespace
+     */
+    protected $dummy_small_plural_model;
+
+    /**
+     * @param DummyModelNamespace $dummy_small_plural_model
+     */
+    public function __construct($dummy_small_plural_model)
+    {
+        $this->dummy_small_plural_model = $dummy_small_plural_model;
+    }
+
+    /**
+     * To Response
+     *
+     * @param \App\Http\Requests\Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function toResponse($request)
+    {
+        return view('backend.dummy_small_plural_model.edit')->with([
+            'dummy_small_plural_model' => $this->dummy_small_plural_model
+        ]);
+    }
+}

@@ -49,6 +49,20 @@ class Generator
     protected $model_namespace = 'App\\Models\\';
 
     /**
+     * Responses
+     * 1. EditResponse Name
+     * 2. CreateResponse Name
+     * 3. EditResponse Namespace
+     * 4. CreateResponse Namespace
+     * 5. Responses Namespace
+     */
+    protected $edit_response = 'EditResponse';
+    protected $create_response = 'CreateResponse';
+    protected $edit_response_namespace;
+    protected $create_response_namespace;
+    protected $responses_namespace = 'App\\Http\\Responses\\';
+
+    /**
      * Controllers
      * 1. Controlller Name
      * 2. Table Controller Name
@@ -273,6 +287,12 @@ class Generator
         $this->update_request_namespace = $this->request_namespace.$this->getFullNamespace($this->update_request);
         $this->delete_request_namespace = $this->request_namespace.$this->getFullNamespace($this->delete_request);
 
+        //Responses
+        $this->responses_namespace .= config('generator.response_namespace'). '\\';
+
+        $this->create_response_namespace = $this->responses_namespace.$this->getFullNamespace($this->create_response);
+        $this->edit_response_namespace = $this->responses_namespace.$this->getFullNamespace($this->edit_response);
+
         //Repository Namespace
         $this->repo_namespace .= config('generator.request_namespace'). '\\' .$this->getFullNamespace($this->repository);
 
@@ -311,6 +331,14 @@ class Generator
     {
         return $this->repo_namespace;
     }
+
+    /**
+     * @return string
+     */
+    public function getResponsesNamespace()
+    {
+        return $this->responses_namespace;
+    }    
 
     /**
      * @return string
@@ -513,6 +541,48 @@ class Generator
     /**
      * @return void
      */
+    public function createResponses()
+    {
+        $this->responses_namespace .= $this->getFullNamespace('');
+        $this->createDirectory($this->getBasePath($this->responses_namespace));
+
+        if ($this->create) {
+            //Generate CreateResponse File
+            $this->generateFile('CreateResponse', [
+                'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->create_response_namespace)),
+                'dummy_small_plural_model' => strtolower(str_plural($this->model)),
+            ], lcfirst($this->create_response_namespace));
+        }
+
+        if ($this->edit) {
+            //Generate EditResponse File
+            $this->generateFile('EditResponse', [
+                'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->edit_response_namespace)),
+                'DummyModelNamespace'         => $this->model_namespace,
+                'dummy_small_plural_model' => strtolower(str_plural($this->model)),
+            ], lcfirst($this->edit_response_namespace));
+        }
+
+        // if ($this->edit) {
+        //     //Generate Create Request File
+        //     $this->generateFile('Request', [
+        //             'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->create_request_namespace)),
+        //             'DummyClass'     => $this->create_request,
+        //             'permission'     => $this->create_permission,
+        //         ], lcfirst($this->create_request_namespace));
+
+        //     //Generate Store Request File
+        //     $this->generateFile('Request', [
+        //             'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->store_request_namespace)),
+        //             'DummyClass'     => $this->store_request,
+        //             'permission'     => $this->store_permission,
+        //         ], lcfirst($this->store_request_namespace));
+        // }   
+    }
+
+    /**
+     * @return void
+     */
     public function createController()
     {
         $this->createDirectory($this->getBasePath($this->controller_namespace, true));
@@ -521,6 +591,8 @@ class Generator
         //Replacements to be done in controller stub
         $replacements = [
             'DummyModelNamespace'         => $this->model_namespace,
+            'DummyCreateResponseNamespace' => $this->create_response_namespace,
+            'DummyEditResponseNamespace'   => $this->edit_response_namespace,
             'DummyModel'                  => $this->model,
             'DummyArgumentName'           => strtolower($this->model),
             'DummyManageRequestNamespace' => $this->manage_request_namespace,

@@ -69,6 +69,7 @@ class ModuleController extends Controller
         $this->generator->createMigration();
         $this->generator->createModel();
         $this->generator->createRequests();
+        $this->generator->createResponses();
         $this->generator->createRepository();
         $this->generator->createController();
         $this->generator->createTableController();
@@ -77,7 +78,7 @@ class ModuleController extends Controller
         $this->generator->createViewFiles();
         $this->generator->createEvents();
         
-        //Creating the Module
+        // Creating the Module
         $this->repository->create($request->all(), $this->generator->getPermissions());
 
         return redirect()->route('admin.modules.index')->withFlashSuccess('Module Generated Successfully!');
