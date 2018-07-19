@@ -1,8 +1,8 @@
 # Generator
-A Laravel 5.6 CRUD Generator Package for Laravel AdminPanel &lt; https://github.com/viralsolani/laravel-adminpanel &gt;
+A Laravel Module Generator Package for Laravel AdminPanel &lt; https://github.com/viralsolani/laravel-adminpanel &gt;
 
 # License
-This CRUD Generator is open-sourced software licensed under the MIT license
+This Module Generator is open-sourced software licensed under the MIT license
 
 # Official Documentation
 To get started with Generator, use Composer to add the package to your project's dependencies:
