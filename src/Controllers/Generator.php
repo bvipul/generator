@@ -5,6 +5,7 @@ namespace Bvipul\Generator\Controllers;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 /**
  * Class Generator.
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Schema;
  */
 class Generator
 {
+    /**
+     * Original Name
+     */
+    protected $originalName;
+
     /**
      * Module Name.
      */
@@ -186,23 +192,26 @@ class Generator
      */
     public function initialize($input)
     {
+        // Original Name entered
+        $this->originalName = Str::title($input['name']);
+
         //Module
-        $this->module = title_case($input['name']);
+        $this->module = Str::camel($this->originalName);
 
         //Directory
-        $this->directory = str_replace(' ' , '', str_singular(title_case($input['directory_name'])));
+        $this->directory = Str::camel(Str::singular(title_case($input['directory_name'])));
 
         //Model
-        $this->model = str_singular(title_case($input['model_name']));
+        $this->model = Str::singular(Str::title($input['model_name']));
 
         //Table
         $this->table = strtolower($input['table_name']);
 
         //Controller
-        $this->controller = str_plural($this->model).'Controller';
+        $this->controller = Str::plural($this->model).'Controller';
 
         //Table Controller
-        $this->table_controller = str_plural($this->model).'TableController';
+        $this->table_controller = Str::plural($this->model).'TableController';
 
         //Attributes
         $this->attribute = $this->model.'Attribute';
@@ -228,7 +237,7 @@ class Generator
         $this->create = !empty($input['model_create']) ? true : false;
         $this->delete = !empty($input['model_delete']) ? true : false;
 
-        $model_singular = strtolower(str_singular($this->model));
+        $model_singular = strtolower(Str::singular($this->model));
         
         //Permissions
         $this->edit_permission = 'edit-'.$model_singular;
@@ -238,7 +247,7 @@ class Generator
         $this->update_permission = 'update-'.$model_singular;
         $this->delete_permission = 'delete-'.$model_singular;
 
-        $model_plural = strtolower(str_plural($this->model));
+        $model_plural = strtolower(Str::plural($this->model));
         
         //Routes
         $this->index_route = 'admin.'.$model_plural.'.index';
@@ -531,8 +540,8 @@ class Generator
                 'DummyRepoName'                 => $this->repository,
                 'dummy_model_name'              => $this->model,
                 'dummy_small_model_name'        => strtolower($this->model),
-                'model_small_plural'            => strtolower(str_plural($this->model)),
-                'dummy_small_plural_model_name' => strtolower(str_plural($this->model)),
+                'model_small_plural'            => strtolower(Str::plural($this->model)),
+                'dummy_small_plural_model_name' => strtolower(Str::plural($this->model)),
         ];
         //Generating the repo file
         $this->generateFile(false, $replacements, lcfirst($this->repo_namespace), $file_contents);
@@ -550,7 +559,7 @@ class Generator
             //Generate CreateResponse File
             $this->generateFile('CreateResponse', [
                 'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->create_response_namespace)),
-                'dummy_small_plural_model' => strtolower(str_plural($this->model)),
+                'dummy_small_plural_model' => strtolower(Str::plural($this->model)),
             ], lcfirst($this->create_response_namespace));
         }
 
@@ -559,7 +568,7 @@ class Generator
             $this->generateFile('EditResponse', [
                 'DummyNamespace' => ucfirst($this->removeFileNameFromEndOfNamespace($this->edit_response_namespace)),
                 'DummyModelNamespace'         => $this->model_namespace,
-                'dummy_small_plural_model' => strtolower(str_plural($this->model)),
+                'dummy_small_plural_model' => strtolower(Str::plural($this->model)),
             ], lcfirst($this->edit_response_namespace));
         }
 
@@ -601,7 +610,7 @@ class Generator
             'DummyNamespace'              => ucfirst($this->removeFileNameFromEndOfNamespace($this->controller_namespace)),
             'DummyRepositoryNamespace'    => $this->repo_namespace,
             'dummy_repository'            => $this->repository,
-            'dummy_small_plural_model'    => strtolower(str_plural($this->model)),
+            'dummy_small_plural_model'    => strtolower(Str::plural($this->model)),
         ];
         $namespaces = '';
         if (!$this->create) {
@@ -710,7 +719,7 @@ class Generator
             'route_namespace'      => config('generator.controller_namespace'),
             'DummyModuleName'      => $this->module,
             'DummyModel'           => $this->directory,
-            'dummy_name'           => strtolower(str_plural($this->model)),
+            'dummy_name'           => strtolower(Str::plural($this->model)),
             'DummyController'      => $this->controller,
             'DummyTableController' => $this->table_controller,
             'dummy_argument_name'  => strtolower($this->model),
@@ -736,11 +745,11 @@ class Generator
     public function insertToLanguageFiles()
     {
         //Model singular version
-        $model_singular = ucfirst(str_singular($this->model));
+        $model_singular = Str::singular($this->originalName);
         //Model Plural version
-        $model_plural = strtolower(str_plural($this->model));
-        //Model plural with capitalize
-        $model_plural_capital = ucfirst($model_plural);
+        $model_plural = Str::plural($this->originalName);
+        //Model Plural key
+        $model_plural_key = strtolower(Str::plural($this->model));
         //Path to that language files
         $path = resource_path('lang'.DIRECTORY_SEPARATOR.'en');
         //config folder path
@@ -752,7 +761,7 @@ class Generator
             'create'     => "Create $model_singular",
             'edit'       => "Edit $model_singular",
             'management' => "$model_singular Management",
-            'title'      => "$model_plural_capital",
+            'title'      => "$model_plural",
 
             'table' => [
                 'id'        => 'Id',
@@ -760,17 +769,17 @@ class Generator
             ],
         ];
         //Pushing values to labels
-        add_key_value_in_file($path.'/labels.php', [$model_plural => $labels], 'backend');
+        add_key_value_in_file($path.'/labels.php', [$model_plural_key => $labels], 'backend');
         //Menus file
         $menus = [
-            'all'        => "All $model_plural_capital",
+            'all'        => "All $model_plural",
             'create'     => "Create $model_singular",
             'edit'       => "Edit $model_singular",
             'management' => "$model_singular Management",
-            'main'       => "$model_plural_capital",
+            'main'       => "$model_plural",
         ];
         //Pushing to menus file
-        add_key_value_in_file($path.'/menus.php', [$model_plural => $menus], 'backend');
+        add_key_value_in_file($path.'/menus.php', [$model_plural_key => $menus], 'backend');
         //Exceptions file
         $exceptions = [
             'already_exists' => "That $model_singular already exists. Please choose a different name.",
@@ -786,12 +795,12 @@ class Generator
             'updated' => "The $model_singular was successfully updated.",
         ];
         //Pushing to menus file
-        add_key_value_in_file($path.'/alerts.php', [$model_plural => $alerts], 'backend');
+        add_key_value_in_file($path.'/alerts.php', [$model_plural_key => $alerts], 'backend');
         //Pushing to exceptions file
-        add_key_value_in_file($path.'/exceptions.php', [$model_plural => $exceptions], 'backend');
+        add_key_value_in_file($path.'/exceptions.php', [$model_plural_key => $exceptions], 'backend');
         //config file "module.php"
         $config = [
-            $model_plural => [
+            $model_plural_key => [
                 'table' => $this->table,
             ],
         ];
@@ -811,11 +820,11 @@ class Generator
         //lowercase version of model
         $model_lower = strtolower($model);
         //lowercase and plural version of model
-        $model_lower_plural = str_plural($model_lower);
+        $model_lower_plural = Str::plural($model_lower);
         //View folder name
         $view_folder_name = $model_lower_plural;
         //View path
-        $path = escapeSlashes(strtolower(str_plural($this->view_path)));
+        $path = escapeSlashes(strtolower(Str::plural($this->view_path)));
         //Header buttons folder
         $header_button_path = $path.DIRECTORY_SEPARATOR.'partials';
         //This would create both the directory name as well as partials inside of that directory

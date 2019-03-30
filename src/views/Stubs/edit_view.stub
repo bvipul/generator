@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {{ Form::model($dummy_small_model, ['route' => ['admin.dummy_small_plural_model.update', $dummy_small_model], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH', 'id' => 'edit-dummy_small_model']) }}
+    {{ Form::model($dummy_small_plural_model, ['route' => ['admin.dummy_small_plural_model.update', $dummy_small_model], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH', 'id' => 'edit-dummy_small_model']) }}
 
         <div class="box box-info">
             <div class="box-header with-border">
