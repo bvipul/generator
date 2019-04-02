@@ -46,6 +46,12 @@
     <script>
         //Below written line is short form of writing $(document).ready(function() { })
         $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
             var dataTable = $('#dummy_small_plural_model-table').dataTable({
                 processing: true,
                 serverSide: true,
