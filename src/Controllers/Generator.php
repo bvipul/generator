@@ -193,16 +193,16 @@ class Generator
     public function initialize($input)
     {
         // Original Name entered
-        $this->originalName = Str::title($input['name']);
+        $this->originalName = Str::studly($input['name']);
 
         //Module
-        $this->module = Str::camel($this->originalName);
+        $this->module = $this->originalName;
 
         //Directory
-        $this->directory = Str::camel(Str::singular(title_case($input['directory_name'])));
+        $this->directory = Str::studly(ucwords($input['directory_name']));
 
         //Model
-        $this->model = Str::singular(Str::title($input['model_name']));
+        $this->model = Str::studly(Str::singular($input['model_name']));
 
         //Table
         $this->table = strtolower($input['table_name']);
@@ -267,7 +267,7 @@ class Generator
     /**
      * @return void
      */
-    private function createNamespacesAndValues()
+    public function createNamespacesAndValues()
     {
         //Model Namespace
         $this->model_namespace .= $this->getFullNamespace($this->model);

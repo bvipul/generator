@@ -262,8 +262,8 @@
                 files = [];
                 model_plural = pluralize(model);
                 files.push(model_nspace + separator + model + ".php\n");
-                files.push(model_nspace + separator + "Traits" + directory_separator + model_plural + "Attribute.php\n");
-                files.push(model_nspace + separator + "Traits" + directory_separator + model_plural + "Relationship.php\n");
+                files.push(model_nspace + separator + "Traits" + directory_separator + model + "Attribute.php\n");
+                files.push(model_nspace + separator + "Traits" + directory_separator + model + "Relationship.php\n");
                 files.push("\n" + controller_nspace + separator +model_plural + "Controller.php\n");
                 files.push(controller_nspace + separator +model_plural + "TableController.php\n");
                 create = $("input[name=model_create]").prop('checked');
@@ -271,15 +271,15 @@
                 del = $("input[name=model_delete]").prop('checked');
                 files.push("\n");
                 if(create) {
-                    files.push(request_nspace + separator + "Create" + model_plural + "Request.php\n");
-                    files.push(request_nspace + separator + "Store" + model_plural + "Request.php\n");
+                    files.push(request_nspace + separator + "Create" + model + "Request.php\n");
+                    files.push(request_nspace + separator + "Store" + model + "Request.php\n");
                 }
                 if(edit) {
-                    files.push(request_nspace + separator + "Edit" + model_plural + "Request.php\n");
-                    files.push(request_nspace + separator + "Update" + model_plural + "Request.php\n");
+                    files.push(request_nspace + separator + "Edit" + model + "Request.php\n");
+                    files.push(request_nspace + separator + "Update" + model + "Request.php\n");
                 }
                 if(del) {
-                    files.push(request_nspace + separator + "Delete" + model_plural + "Request.php\n");
+                    files.push(request_nspace + separator + "Delete" + model + "Request.php\n");
                 }
                 files.push("\n" + views_path + separator + "index.blade.php\n");
                 if(create) {
@@ -294,7 +294,7 @@
                 files.push("\n");
                 files.push(route_path + model + ".php\n");
                 files.push("\n");
-                files.push(repo_nspace + separator + model_plural + "Repository.php\n");
+                files.push(repo_nspace + separator + model + "Repository.php\n");
                 files.push("\n");
                 $(document).find('input[name="event[]"]').each(function(){
                     if(e = $(this).val()) {

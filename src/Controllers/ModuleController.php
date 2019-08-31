@@ -46,6 +46,8 @@ class ModuleController extends Controller
      */
     public function create(Request $request)
     {
+        $this->generator->createNamespacesAndValues();
+
         return view('generator::create')
             ->with('model_namespace', $this->generator->getModelNamespace())
             ->with('request_namespace', $this->generator->getRequestNamespace())
