@@ -2,6 +2,7 @@
 
 namespace Bvipul\Generator\Repositories;
 
+use Illuminate\Support\Str;
 use Bvipul\Generator\Module;
 use App\Exceptions\GeneralException;
 use App\Repositories\BaseRepository;
@@ -53,7 +54,7 @@ class ModuleRepository extends BaseRepository
             foreach ($permissions as $permission) {
                 $perm = [
                     'name'         => $permission,
-                    'display_name' => title_case(str_replace('-', ' ', $permission)).' Permission',
+                    'display_name' => Str::title(str_replace('-', ' ', $permission)).' Permission',
                 ];
                 //Creating Permission
                 $per = Permission::firstOrCreate($perm);
