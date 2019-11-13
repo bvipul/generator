@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['namespace' => 'Bvipul\Generator\Controllers', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['web', 'admin'] ], function () {
-	Route::resource('modules', 'ModuleController');
+    Route::resource('modules', 'ModuleController');
 
     //For DataTables
     Route::post('modules/get', 'ModuleTableController')

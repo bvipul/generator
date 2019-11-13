@@ -70,8 +70,7 @@ class ModuleRepository extends BaseRepository
             $create = Module::create($mod);
 
             return $create;
-        }
-        else {
+        } else {
             return $module;
         }
 
