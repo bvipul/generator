@@ -2,11 +2,11 @@
 
 namespace Bvipul\Generator\Repositories;
 
-use Illuminate\Support\Str;
 use Bvipul\Generator\Module;
 use App\Exceptions\GeneralException;
 use App\Repositories\BaseRepository;
 use App\Models\Access\Permission\Permission;
+use Illuminate\Support\Str;
 
 /**
  * Class ModuleRepository.
