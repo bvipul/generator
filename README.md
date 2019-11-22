@@ -39,4 +39,5 @@ and you can get the title "Module Management" from package's translation file by
 You can contribute to this project, by just taking fork of it. We are open for suggestion and PRs. If you have any new suggestions or anything for that matter, contact me at basapativipulkumar@gmail.com
 
 
-
+# Note
+This is hotfix for `https://github.com/viralsolani/laravel-adminpanel/issues/528`

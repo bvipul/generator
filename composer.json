@@ -3,17 +3,14 @@
     "description": "To create a whole module with all related files like model, controller, repository, routes, views etc with a simple GUI.",
     "type": "package",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Vipul Basapati",
-            "email": "basapativipulkumar@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Vipul Basapati",
+        "email": "basapativipulkumar@gmail.com"
+    }],
     "autoload": {
-    	"psr-4": {
+        "psr-4": {
             "Bvipul\\Generator\\": "src/"
         }
     },
-    "require": {
-    }
+    "require": {}
 }

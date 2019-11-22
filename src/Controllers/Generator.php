@@ -347,7 +347,7 @@ class Generator
     public function getResponsesNamespace()
     {
         return $this->responses_namespace;
-    }    
+    }
 
     /**
      * @return string
@@ -586,7 +586,7 @@ class Generator
         //             'DummyClass'     => $this->store_request,
         //             'permission'     => $this->store_permission,
         //         ], lcfirst($this->store_request_namespace));
-        // }   
+        // }
     }
 
     /**
@@ -967,10 +967,11 @@ class Generator
     {
         $path = resource_path('views'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'generator'.DIRECTORY_SEPARATOR.'Stubs'.DIRECTORY_SEPARATOR);
         $package_stubs_path = base_path('vendor'.DIRECTORY_SEPARATOR.'bvipul'.DIRECTORY_SEPARATOR.'generator'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'Stubs'.DIRECTORY_SEPARATOR);
-        if($this->files->exists($path)) 
+        if ($this->files->exists($path)) {
             return $path;
-        else
+        } else {
             return $package_stubs_path;
+        }
     }
 
     /**

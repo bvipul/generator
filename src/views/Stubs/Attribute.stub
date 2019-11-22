@@ -8,7 +8,7 @@ namespace AttributeNamespace;
 trait AttributeClass
 {
     // Make your attributes functions here
-    // Further, see the documentation : https://laravel.com/docs/5.4/eloquent-mutators#defining-an-accessor
+    // Further, see the documentation : https://laravel.com/docs/6.x/eloquent-mutators#defining-an-accessor
 
 
     /**
@@ -17,9 +17,8 @@ trait AttributeClass
      */
     public function getActionButtonsAttribute()
     {
-        return '<div class="btn-group action-btn">
-                '.$this->getEditButtonAttribute("editPermission", "editRoute").'
-                '.$this->getDeleteButtonAttribute("deletePermission", "deleteRoute").'
+        return '<div class="btn-group action-btn"> {$this->getEditButtonAttribute("editPermission", "editRoute")}
+                {$this->getDeleteButtonAttribute("deletePermission", "deleteRoute")}
                 </div>';
     }
 }

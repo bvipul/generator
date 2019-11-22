@@ -6,6 +6,7 @@ use Bvipul\Generator\Module;
 use App\Exceptions\GeneralException;
 use App\Repositories\BaseRepository;
 use App\Models\Access\Permission\Permission;
+use Illuminate\Support\Str;
 
 /**
  * Class ModuleRepository.
@@ -53,7 +54,7 @@ class ModuleRepository extends BaseRepository
             foreach ($permissions as $permission) {
                 $perm = [
                     'name'         => $permission,
-                    'display_name' => title_case(str_replace('-', ' ', $permission)).' Permission',
+                    'display_name' => Str::title(str_replace('-', ' ', $permission)).' Permission',
                 ];
                 //Creating Permission
                 $per = Permission::firstOrCreate($perm);
@@ -62,15 +63,14 @@ class ModuleRepository extends BaseRepository
             $mod = [
                 'view_permission_id' => "view-$model-permission",
                 'name'               => $input['name'],
-                'url'                => 'admin.'.str_plural($model).'.index',
+                'url'                => 'admin.'.Str::plural($model).'.index',
                 'created_by'         => access()->user()->id,
             ];
 
             $create = Module::create($mod);
 
             return $create;
-        }
-        else {
+        } else {
             return $module;
         }
 
